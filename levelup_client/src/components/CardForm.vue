@@ -28,7 +28,7 @@ const cardInfo = ref({
 const sendOrderToAPI = async () => {
   console.log(cardInfo.value)
   await axios
-    .post('http://levelup.test:80/api/verification', cardInfo.value)
+    .post(`http://127.0.0.1:8080/api/verification`, cardInfo.value)
     .then((response) => {
       console.log(response)
       toast.success('Card info sent for final verification')
