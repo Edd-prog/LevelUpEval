@@ -12,16 +12,26 @@ class CreditCardController extends Controller
         //dd($request);
         $cardInfo = $request->validated();
 
-        
+
         $cvvLen = strlen((string)$cardInfo['cvv']);
-        if (($cardInfo['type'] == 'visa' || $cardInfo['type'] == 'mc') && $cvvLen != 3 ) {
+        if (($cardInfo['type'] == 'visa' || $cardInfo['type'] == 'mc') && $cvvLen != 3) {
 
             return response('cvv incorrect', 422)->header('Content-Type', 'application/json');
         }
-        if ($cardInfo['type'] == 'am' && $cvvLen != 4) {
+        if ($cardInfo['type'] == 'am') {
 
-            return response('cvv incorrect', 422)->header('Content-Type', 'application/json');
+            if ($cvvLen != 4) {
+                return response('cvv incorrect', 422)->header('Content-Type', 'application/json');
+            }
+            $panNumber = ((string)$cardInfo['pan']);
+            $panIntit = $panNumber[0] . $panNumber[1];
+
+            if ($panIntit != '34' && $panIntit != '37') {
+                return response('incorrect pan', 422)->header('Content-Type', 'application/json');
+            }
         }
+
+
 
         return "estou aqui";
     }
@@ -30,8 +40,8 @@ class CreditCardController extends Controller
     /*
         The expiry date of the credit card (year and month) must be AFTER present time
         The CVV (security code) of the credit card must be exactly 3 digits long
-
         Unless it’s an American Express card, in which case the CVV must be exactly 4 digits long
+       
         American Express are cards whose PAN (card numbers) starts with either “34” or “37”
 
 
