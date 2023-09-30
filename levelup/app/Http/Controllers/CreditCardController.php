@@ -31,9 +31,14 @@ class CreditCardController extends Controller
             }
         }
 
+        //dd(intval(date('m')));
+        if ($cardInfo['year'] == date('Y') && $cardInfo['month'] < intval(date('m'))) {
+            return response('card expired', 422)->header('Content-Type', 'application/json');
+        }
 
 
-        return "estou aqui";
+
+        return response('card info correct', 200)->header('Content-Type', 'application/json');
     }
 
 
