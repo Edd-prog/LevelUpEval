@@ -29,4 +29,18 @@ class CredidCardPost extends FormRequest
             'pan'   =>  'required|integer|digits_between:16,19',
         ];
     }
+    public function messages()
+    {
+        return [
+            'type.required' => 'Credit card type is required',
+            'username.required' => 'Credit card owner is required',
+            'cvv.required' => 'Credit card CVV is required',
+            'pan.required' => 'Credit card pan is required',
+
+            'cvv.integer' => 'CVV must be an integer',
+            'pan.integer' => 'PAN must be an integer',
+
+            'cvv.digits_between' => 'CVV must be between 3 and 4 digits (inclusive)',
+        ];
+    }
 }
