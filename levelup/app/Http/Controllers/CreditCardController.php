@@ -12,11 +12,15 @@ class CreditCardController extends Controller
         //dd($request);
         $cardInfo = $request->validated();
 
-        //dd($cardInfo['type']);
+        
+        $cvvLen = strlen((string)$cardInfo['cvv']);
+        if (($cardInfo['type'] == 'visa' || $cardInfo['type'] == 'mc') && $cvvLen != 3 ) {
 
-        if ($cardInfo['type'] == 'am') {
-            $cvvLen = strlen((string)$cardInfo['cvv']);
-            dd($cvvLen);
+            return response('cvv incorrect', 422)->header('Content-Type', 'application/json');
+        }
+        if ($cardInfo['type'] == 'am' && $cvvLen != 4) {
+
+            return response('cvv incorrect', 422)->header('Content-Type', 'application/json');
         }
 
         return "estou aqui";
