@@ -36,6 +36,25 @@ class CreditCardController extends Controller
         }
 
 
+        //luhn algoritm
+        //convert pan int int array
+        $panSum = 0;
+        $panArray  = array_map('intval', str_split($cardInfo['pan']));
+        //run array from right to left starting in second position
+        for ($i = count($panArray) - 2; $i >= 0; $i = $i - 2) {
+            if ($panArray[$i] > 4) {
+                $panArray[$i] = $panArray[$i] + $panArray[$i] - 9;
+            } else {
+                $panArray[$i] = $panArray[$i] + $panArray[$i];
+            }
+        }
+        //sum total value of array
+        $panSum = array_sum($panArray);
+        //if mod 10 different than 0 - pan is invalid
+        if ($panSum % 10 != 0) {
+            return response('pan is invalid', 422)->header('Content-Type', 'application/json');
+        }
+
         return response('card info correct', 200)->header('Content-Type', 'application/json');
     }
 }
